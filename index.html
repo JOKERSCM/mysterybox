@@ -388,7 +388,8 @@
       </div>
     </div>
   </div>
-  <script>
+  <!-- ... (bagian head, style, dan body tetap, tidak diubah) ... -->
+<script>
   // Animasi efek typing judul
   const titleText = "SELAMAT DATANG DI MYSTERY BOX ";
   let typeIndex = 0;
@@ -460,8 +461,8 @@
     openedIndex = null;
     currentPrize = null;
 
-    // GANTI URL DI SINI SESUAI WEB APP SCRIPT KAMU!
-    fetch('https://script.google.com/macros/s/AKfycbygSoYYaH3B-TR6ijgWdcU5sERCBaXWYPCg6ZKohpWgx_rrx8hwiBfJR64yX8OWtsy9-w/exec?kode=' + encodeURIComponent(code) + '&userid=' + encodeURIComponent(userId))
+    // GANTI URL SESUAI ENDPOINT BARU KAMU
+    fetch('https://script.google.com/macros/s/AKfycbwrHTuErjtO3kSCjKg9bYPKa3smV2jgXwBIVONCjAq08Kj2rNRspLF0sSVFig23bxe5Dg/exec?kode=' + encodeURIComponent(code) + '&userid=' + encodeURIComponent(userId))
       .then(response => response.json())
       .then(data => {
         submitBtn.disabled = false;
@@ -558,6 +559,6 @@
   function closeModal() {
     document.getElementById('prizeModal').classList.remove('show');
   }
-  </script>
+</script>
 </body>
 </html>
