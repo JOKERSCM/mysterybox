@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mystery Box High-End</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { 
+      --gold1: #ffe066; 
+      --gold2: #ffd700;
+      --neon1: #fded72;
+      --neon2: #ffb300;
+      --bgd: linear-gradient(160deg, #2c0000, #0b0000 95%);
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0; padding: 0;
+      background: var(--bgd);
+      color: #fefefe; text-align: center;
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+      overflow-x: hidden;
+    }
+    .shimmer-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 75% 20%, #ffe06622 0, #ffd70011 40%, #0000 80%);
+      overflow: hidden;
+    }
+    .shimmer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 200vw; height: 200vh;
+      background: repeating-linear-gradient(-45deg, #ffe06660 0 2px, #fff0 3px 40px);
+      animation: shimmerMove 7s linear infinite;
+      opacity: 0.16;
+    }
+    @keyframes shimmerMove {
+      100% { transform: translateX(-400px) translateY(-100px) rotate(3deg);}
+    }
+    /* Particles Gold */
+    .particles {
+      pointer-events: none;
+      position: fixed; z-index: 1;
+      inset: 0; width: 100vw; height: 100vh;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--gold2) 60%, #fff3 100%);
+      box-shadow: 0 0 10px 2px #ffd70099, 0 0 1px #fff8;
+      opacity: 0.65;
+      animation: floatParticle 8s linear infinite;
+    }
+    @keyframes floatParticle {
+      0% { transform: translateY(0) scale(1);}
+      60% { opacity: 0.8;}
+      100% { transform: translateY(-70vh) scale(1.5); opacity: 0;}
+    }
+    /* Logo Animasi */
+    .logo-container {
+      margin: 36px auto 24px;
+      width: 370px; max-width: 95vw;
+      opacity: 0;
+      animation: logoDropIn 1.3s cubic-bezier(.23,1.36,.4,1.1) 0.5s forwards;
+      filter: drop-shadow(0 0 40px #fded72e9) drop-shadow(0 0 160px #ffd70080);
+      position: relative; z-index: 3;
+    }
+    @keyframes logoDropIn {
+      0% { opacity: 0; transform: scale(0.6) translateY(-90px);}
+      60% { opacity: 1;}
+      80% { transform: scale(1.15) translateY(8px);}
+      100% { opacity: 1; transform: scale(1) translateY(0);}
+    }
+    .logo-container img {
+      width: 100%; border-radius: 26px;
+      background: linear-gradient(110deg, #fff4 30%, #fff1 70%);
+      box-shadow: 0 0 0 6px #fff2  ;
+      border: 2.2px solid #ffd70088;
+      filter:
+        drop-shadow(0 0 12px #ffd700)
+        drop-shadow(0 0 28px #fded72)
+        drop-shadow(0 0 60px #ffb30050);
+      animation: neonPulse 3s infinite alternate;
+      transition: transform 0.3s cubic-bezier(.23,1.36,.4,1.1);
+    }
+    .logo-container img:hover {
+      transform: scale(1.09) rotate(-1deg);
+      filter: brightness(1.08) drop-shadow(0 0 25px #fff);
+    }
+    @keyframes neonPulse {
+      to { filter: drop-shadow(0 0 50px #ffd700cc) drop-shadow(0 0 100px #fded72a9) drop-shadow(0 0 100px #ffb30080);}
+    }
+    /* Main Title Typing+Flash */
+    .main-title {
+      font-weight: 900; font-size: 3.2rem; color: #ffe066;
+      margin-bottom: 28px; letter-spacing: 2.3px; text-transform: uppercase;
+      text-shadow: 0 2px 24px #ffe066c7, 0 1px 2px #bc9700, 0 0 2px #000a;
+      opacity: 0;
+      animation: fadeAppear 1.1s 1.1s forwards;
+      min-height: 72px;
+      position: relative; z-index: 2;
+    }
+    @keyframes fadeAppear { from {opacity: 0;} to {opacity: 1;} }
+    .main-title .type-cursor {
+      display: inline-block; width: 1ch;
+      animation: blink 0.7s steps(2) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    .main-title.flash {
+      animation: flashTitle 0.44s cubic-bezier(.8,2,.8,1.6) 1;
+    }
+    @keyframes flashTitle {
+      0% { text-shadow: 0 0 36px #ffd700, 0 0 40px #fff8; color: #fffad1; }
+      100% { text-shadow: 0 2px 24px #ffe066c7, 0 1px 2px #bc9700; color: #ffe066;}
+    }
+    /* Keyframes untuk bling */
+    @keyframes bling {
+      0% { filter:brightness(2.1);}
+      40% { filter:brightness(1.2);}
+      80% { filter:brightness(1.9);}
+      100% { filter:brightness(1);}
+    }
+    /* FORM Neon Glass */
+    #userForm {
+      max-width: 430px; margin: 0 auto;
+      padding: 42px 30px 46px;
+      background: rgba(33, 19, 0, 0.75);
+      border-radius: 33px;
+      backdrop-filter: blur(7.5px) saturate(145%);
+      box-shadow: 0 0 90px 0 #ffd70099, 0 0 0 2.5px #ffd7008c inset, 0 10px 22px #000a;
+      position: relative; z-index: 3;
+      opacity: 0; transform: translateY(24px);
+      animation: formAppear 1.2s 1.55s forwards, floatCard 2.5s 2.6s infinite alternate cubic-bezier(.4,1.15,.9,1.04);
+      transition: box-shadow 0.2s;
+    }
+    @keyframes floatCard {
+      to { box-shadow: 0 0 120px 0 #ffe066a2, 0 0 0 5px #ffd700c9 inset, 0 15px 32px #0007; }
+    }
+    @keyframes formAppear {
+      from { opacity: 0; transform: translateY(42px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    #userForm.fade-out { opacity: 0; pointer-events: none;}
+    label { display: block; font-size: 1.16rem; font-weight: 700; margin-bottom: 13px; color: #ffe066; letter-spacing: 1px;}
+    input[type="text"] {
+      width: 100%; padding: 16px 18px; font-size: 1.10rem; border-radius: 13px;
+      border: 2px solid #ffd700; background-color: #1a1a1a; color: #fffbe2;
+      box-shadow: 0 1px 11px #ffe06634 inset;
+      outline: none; font-weight: 500; text-align: center; margin-bottom: 22px;
+      transition: border 0.17s, box-shadow 0.19s;
+      font-family: inherit;
+    }
+    input[type="text"]:focus { border-color: #ffd800; box-shadow: 0 1px 18px #ffd700b0 inset;}
+    #submitBtn, #seePrizesBtn {
+      margin-top: 16px; width: 100%; padding: 17px 0; font-size: 1.23rem;
+      border-radius: 15px; font-weight: 800; cursor: pointer; user-select: none; transition: all 0.22s;
+      letter-spacing: 1.1px; box-shadow: 0 4px 22px #ffd7004c;
+      position: relative; overflow: hidden;
+    }
+    #submitBtn {
+      background: linear-gradient(90deg, #ffdf3b 40%, #ffb300 100%);
+      border: none; color: #522700;
+      text-shadow: 0 1px 0 #ffed90b0;
+      box-shadow: 0 2px 28px #ffd70050, 0 0 16px #fff8;
+    }
+    #submitBtn:hover:enabled {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 0 55px #fff69b, 0 12px 36px #ffe0668e;
+      filter: brightness(1.07);
+      border: 2px solid #ffd700;
+      animation: btnGlow .5s;
+    }
+    @keyframes btnGlow {
+      0% { filter: brightness(1.18) drop-shadow(0 0 40px #ffd700dd);}
+      100% { filter: brightness(1.07);}
+    }
+    #submitBtn:disabled { opacity: 0.5; cursor: not-allowed;}
+    #seePrizesBtn {
+      background: linear-gradient(90deg, #292929 70%, #181818 100%);
+      border: 2px solid #ffd700; color: #ffe066; margin-top: 12px;
+      text-shadow: 0 1px 0 #bc9700b0;
+    }
+    #seePrizesBtn:hover {
+      background: #0c0c0c; color: #ffd700;
+      box-shadow: 0 0 24px #ffd700c5, 0 4px 22px #fff4;
+      transform: scale(1.04) translateY(-2px);
+    }
+    /* Box Container Animasi */
+    #boxContainer {
+      margin-top: 50px; max-width: 700px; margin-left: auto; margin-right: auto;
+      display: none; flex-direction: column; gap: 25px; opacity: 0;
+      transition: opacity 0.7s ease; user-select: none;
+    }
+    #boxContainer.visible { display: flex; opacity: 1;}
+    .box-row { display: flex; justify-content: center; gap: 25px;}
+    .cube-box {
+      width: 220px; height: 220px; display: flex; align-items: center; justify-content: center;
+      position: relative; cursor: pointer; perspective: 900px; transition: filter 0.3s, transform 0.3s;
+      animation: popInBox 0.72s cubic-bezier(.6,1.6,.4,1.08) both;
+      opacity: 0;
+    }
+    .box-row .cube-box { animation-delay: calc(.13s * var(--i)); }
+    @keyframes popInBox {
+      0% { opacity: 0; transform: scale(0.5) translateY(60px);}
+      80% { opacity: 1;}
+      100% { opacity: 1; transform: scale(1) translateY(0);}
+    }
+    .cube-box.opened:not(.selected) { pointer-events: none; filter: grayscale(0.6) brightness(0.7);}
+    .cube-box.selected { filter: none !important; animation: boxBounce 0.53s cubic-bezier(.23,1.26,.4,1.1) 1;}
+    @keyframes boxBounce {
+      0% { transform: translateY(0);}
+      18% { transform: translateY(-24px);}
+      32% { transform: translateY(5px);}
+      50% { transform: translateY(-14px);}
+      66% { transform: translateY(2px);}
+      80% { transform: translateY(-6px);}
+      90% { transform: translateY(1px);}
+      100% { transform: translateY(0);}
+    }
+    .cube-3d {
+      width: 180px; height: 180px; position: relative;
+      transform-style: preserve-3d; transition: transform 0.9s cubic-bezier(.23,1.26,.4,1.1);
+    }
+    .hexagon {
+      z-index: -2; position: absolute; top: 35px; left: 0;
+      width: 180px; height: 110px; background-color: var(--gold2);
+      filter: blur(17px); opacity: 0.85; pointer-events: none;
+      background: radial-gradient(circle, #ffd700cc 50%, #fff0 100%);
+    }
+    .cube.back, .cube.top, .cube.left, .cube.right {
+      position: absolute; width: 180px; height: 180px; border-radius: 18px;
+      background-size: cover; background-position: center; box-shadow: 0 5px 18px #ffb600b2, 0 0 20px #ffb80073 inset;
+      transition: transform 0.8s cubic-bezier(.23,1.26,.4,1.1), opacity 0.7s;
+    }
+    .cube.back   { z-index: 1; left: 0; top: 0; background-image: url('https://res.cloudinary.com/dbrwtwlwl/image/upload/v1580369339/cube/mysteryBoxBackground_2x_b2espr.png'); }
+    .cube.top    { z-index: 2; left: 0; top: 0; background-image: url('https://res.cloudinary.com/dbrwtwlwl/image/upload/v1580369339/cube/mysteryBoxTopFlap_2x_f9cb8g.png'); }
+    .cube.left   { z-index: 3; left: 0; top: 0; background-image: url('https://res.cloudinary.com/dbrwtwlwl/image/upload/v1580369339/cube/mysteryBoxLeftFlap_2x_y8u4gz.png'); }
+    .cube.right  { z-index: 4; left: 0; top: 0; background-image: url('https://res.cloudinary.com/dbrwtwlwl/image/upload/v1580369339/cube/mysteryBoxRightFlap_2x_abexhh.png'); }
+    .prize-img {
+      position: absolute;
+      left: 50%; top: 50%; transform: translate(-50%,-50%) scale(0.4);
+      width: 125px; height: 125px;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.3s, filter 0.3s, transform 0.36s cubic-bezier(.23,1.26,.4,1.1);
+      pointer-events: none;
+      z-index: 15;
+    }
+    .cube-box.opened .prize-img.visible {
+      opacity: 1;
+      transform: translate(-50%,-50%) scale(1.28);
+      animation: prizePop 0.33s cubic-bezier(.23,1.26,.4,1.1) 1;
+    }
+    .prize-img.pulse {
+      animation: prizePulse 0.47s cubic-bezier(.23,1.26,.4,1.1) 1;
+    }
+    @keyframes prizePop {
+      0% { transform: translate(-50%,-50%) scale(0.5);}
+      80% { transform: translate(-50%,-50%) scale(1.18);}
+      100% { transform: translate(-50%,-50%) scale(1.13);}
+    }
+    @keyframes prizePulse {
+      0% { transform: translate(-50%,-50%) scale(1);}
+       25% { transform: translate(-50%,-50%) scale(1.18);}
+      45% { transform: translate(-50%,-50%) scale(0.92);}
+      65% { transform: translate(-50%,-50%) scale(1.13);}
+      100% { transform: translate(-50%,-50%) scale(1);}
+    }
+    @media (max-width: 700px) {
+      .logo-container { width: 170px; }
+      .main-title { font-size: 1.25rem;}
+      #userForm { padding: 22px 3vw 20px; max-width: 99vw;}
+      .cube-box { width: 90px; height: 90px;}
+      .cube-3d, .cube.back, .cube.top, .cube.left, .cube.right { width: 60px; height: 60px;}
+      .hexagon { width: 45px; height: 22px; top: 12px; }
+      .prize-img { width: 32px; height: 32px;}
+    }
+    #result { margin-top: 35px; font-size: 1.4rem; font-weight: 700; color: #ffd700; min-height: 70px; text-shadow: 0 2px 20px #ffd700a7;}
+    #result a {
+      display: inline-block; margin-top: 12px; padding: 10px 20px; background: #ffcc00; color: #000;
+      font-weight: bold; border-radius: 10px; text-decoration: none; box-shadow: 0 0 10px #ffd700; transition: background 0.3s;
+      font-size: 1.1rem;
+    }
+    #result a:hover { background: #ffdd33; box-shadow: 0 0 15px #ffd900; color: #b77c00;}
+    .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); justify-content: center; align-items: center; }
+    .modal.show { display: flex !important;}
+    .modal-content { background: #1a1a1a; padding: 30px; border-radius: 20px; width: 600px; max-width: 90vw; text-align: center; box-shadow: 0 0 30px #ffcc00; color: #fff; position: relative; }
+    .closeBtn { position: absolute; top: 15px; right: 20px; font-size: 28px; color: #ffcc00; cursor: pointer; }
+    .prize-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 20px;}
+    .prize-list div { text-align: center;}
+    .prize-list img { width: 100px; border-radius: 10px; box-shadow: 0 0 15px #ffbf00; margin-bottom: 5px; loading: lazy;}
+    .prize-list p { font-size: 1rem; margin: 0; color: #ffe066; font-weight: bold;}
+  </style>
+</head>
+<body>
+  <div class="shimmer-bg">
+    <div class="shimmer"></div>
+  </div>
+  <div class="particles" id="particles"></div>
+  <div class="logo-container">
+    <img src="https://i.ibb.co/C31q5L1C/logoweb-2.png" alt="Logo JOKERSCM" loading="lazy" />
+  </div>
+  <h1 class="main-title" id="mainTitle"><span id="typeText"></span><span class="type-cursor">|</span></h1>
+  <div id="userForm">
+    <label for="userIdInput">Masukkan ID Akun Kamu:</label>
+    <input type="text" id="userIdInput" placeholder="Masukkan ID akun" />
+    <label for="userInput">Masukkan Kode Kamu:</label>
+    <input type="text" id="userInput" placeholder="Masukkan kode" />
+    <button id="submitBtn" onclick="submitCode()">Mulai</button>
+    <button id="seePrizesBtn" onclick="showPrizes()">Lihat Daftar Hadiah</button>
+  </div>
+  <div id="boxContainer">
+    <div class="box-row">
+      <div class="cube-box" style="--i:0" onclick="openBox(0)">
+        <div class="cube-3d">
+          <div class="hexagon"></div>
+          <div class="cube back"></div>
+          <div class="cube top"></div>
+          <div class="cube left"></div>
+          <div class="cube right"></div>
+          <img class="prize-img" />
+        </div>
+      </div>
+      <div class="cube-box" style="--i:1" onclick="openBox(1)">
+        <div class="cube-3d">
+          <div class="hexagon"></div>
+          <div class="cube back"></div>
+          <div class="cube top"></div>
+          <div class="cube left"></div>
+          <div class="cube right"></div>
+          <img class="prize-img" />
+        </div>
+      </div>
+      <div class="cube-box" style="--i:2" onclick="openBox(2)">
+        <div class="cube-3d">
+          <div class="hexagon"></div>
+          <div class="cube back"></div>
+          <div class="cube top"></div>
+          <div class="cube left"></div>
+          <div class="cube right"></div>
+          <img class="prize-img" />
+        </div>
+      </div>
+    </div>
+    <div class="box-row">
+      <div class="cube-box" style="--i:3" onclick="openBox(3)">
+        <div class="cube-3d">
+          <div class="hexagon"></div>
+          <div class="cube back"></div>
+          <div class="cube top"></div>
+          <div class="cube left"></div>
+          <div class="cube right"></div>
+          <img class="prize-img" />
+        </div>
+      </div>
+      <div class="cube-box" style="--i:4" onclick="openBox(4)">
+        <div class="cube-3d">
+          <div class="hexagon"></div>
+          <div class="cube back"></div>
+          <div class="cube top"></div>
+          <div class="cube left"></div>
+          <div class="cube right"></div>
+          <img class="prize-img" />
+        </div>
+      </div>
+      <div class="cube-box" style="--i:5" onclick="openBox(5)">
+        <div class="cube-3d">
+          <div class="hexagon"></div>
+          <div class="cube back"></div>
+          <div class="cube top"></div>
+          <div class="cube left"></div>
+          <div class="cube right"></div>
+          <img class="prize-img" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="result"></div>
+  <div id="prizeModal" class="modal">
+    <div class="modal-content">
+      <span class="closeBtn" onclick="closeModal()">&times;</span>
+      <h2>Daftar Hadiah</h2>
+      <div class="prize-list">
+        <div><img src="https://i.postimg.cc/fWYjxX97/2-5.png" alt="Rp 20.000" loading="lazy"><p>Rp 20.000</p></div>
+        <div><img src="https://i.postimg.cc/MKD7LStv/2-4.png" alt="Rp 15.000" loading="lazy"><p>Rp 15.000</p></div>
+        <div><img src="https://i.postimg.cc/xTy5SHjj/2-3.png" alt="Rp 10.000" loading="lazy"><p>Rp 10.000</p></div>
+        <div><img src="https://i.postimg.cc/8kvwt9q6/2-2.png" alt="Rp 5.000" loading="lazy"><p>Rp 5.000</p></div>
+        <div><img src="https://i.postimg.cc/g0B4TWzv/2-1.png" alt="Rp 3.000" loading="lazy"><p>Rp 3.000</p></div>
+        <div><img src="https://i.postimg.cc/cLwDCjcW/2.png" alt="Rp 2.000" loading="lazy"><p>Rp 2.000</p></div>
+      </div>
+    </div>
+  </div>
+  <script>
+  // Animasi efek typing judul
+  const titleText = "SELAMAT DATANG DI MYSTERY BOX ";
+  let typeIndex = 0;
+  function typeEffect() {
+    if (typeIndex <= titleText.length) {
+      document.getElementById('typeText').textContent = titleText.substring(0, typeIndex);
+      typeIndex++;
+      setTimeout(typeEffect, 32);
+    } else {
+      setTimeout(()=>document.getElementById('mainTitle').classList.add('flash'),100);
+      setTimeout(()=>document.getElementById('mainTitle').classList.remove('flash'),420);
+    }
+  }
+  window.addEventListener('DOMContentLoaded', () => {
+    typeEffect();
+    // Partikel gold bling
+    const colors = ["#ffe066", "#ffcf33", "#fff7bc", "#ffb800"];
+    const n = 20;
+    for(let i=0; i<n; i++){
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      const size = Math.random() * 14 + 8;
+      particle.style.width = particle.style.height = size + "px";
+      particle.style.left = (Math.random()*98) + "vw";
+      particle.style.bottom = (Math.random()*10) + "vh";
+      particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random()*colors.length)]} 60%, #fff0 100%)`;
+      particle.style.opacity = (Math.random()*0.35 + 0.45).toFixed(2);
+      particle.style.animationDelay = (Math.random()*4).toFixed(2) + 's';
+      document.getElementById('particles').appendChild(particle);
+    }
+    // Delay animasi pop box
+    setTimeout(()=>{
+      document.querySelectorAll('.cube-box').forEach((box, i)=> {
+        box.style.opacity=0;
+        setTimeout(()=>{ box.style.opacity=1; }, 370 + i*100);
+      });
+    }, 2100);
+  });
+
+  // Data hadiah dan gambar
+  let boxOpened = false;
+  let openedIndex = null;
+  let currentPrize = null;
+  const prizeImages = {
+    '2000': 'https://i.postimg.cc/cLwDCjcW/2.png',
+    '3000': 'https://i.postimg.cc/g0B4TWzv/2-1.png',
+    '5000': 'https://i.postimg.cc/8kvwt9q6/2-2.png',
+    '10000': 'https://i.postimg.cc/xTy5SHjj/2-3.png',
+    '15000': 'https://i.postimg.cc/MKD7LStv/2-4.png',
+    '20000': 'https://i.postimg.cc/fWYjxX97/2-5.png'
+  };
+  function normalizePrizeKey(prize) {
+    return prize.replace(/[^\d]/g, '').trim(); // Ambil hanya angka hadiah
+  }
+
+  function submitCode() {
+    const userId = document.getElementById('userIdInput').value.trim();
+    const code = document.getElementById('userInput').value.trim();
+    if (!userId || !code || !/^[a-zA-Z0-9]+$/.test(code)) {
+      alert('Pastikan ID dan kode diisi dengan benar!');
+      return;
+    }
+    const form = document.getElementById('userForm');
+    const boxContainer = document.getElementById('boxContainer');
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    boxOpened = false; // reset, supaya bisa buka box lagi setelah submit ulang
+    openedIndex = null;
+    currentPrize = null;
+
+    // Call Apps Script backend (PRODUCTION MODE)
+    google.script.run.withSuccessHandler(function(prize) {
+      submitBtn.disabled = false;
+      if (prize) {
+        // prize kemungkinan format "Rp 2.000" dsb, normalisasi jadi key gambar
+        currentPrize = normalizePrizeKey(prize);
+        form.classList.add('fade-out');
+        setTimeout(() => {
+          form.style.display = 'none';
+          boxContainer.style.display = 'flex';
+          setTimeout(() => boxContainer.classList.add('visible'), 100);
+        }, 200);
+        document.getElementById('result').innerHTML = `<span style="font-size:1.6rem;display:inline-block;animation:bling .8s;">🎉</span>`;
+      } else {
+        alert('Kode sudah digunakan atau tidak valid!');
+      }
+    }).checkCodeAndGetPrizeWithUserId(code, userId);
+  }
+
+  function openBox(index) {
+    if (boxOpened || !currentPrize) {
+      alert('Kamu sudah membuka atau belum validasi kode!');
+      return;
+    }
+    boxOpened = true;
+    openedIndex = index;
+    const boxes = document.querySelectorAll('.cube-box');
+    const prizeImageUrl = prizeImages[currentPrize] || '';
+    const otherPrizeUrls = Object.values(prizeImages).filter(url => url !== prizeImageUrl);
+    shuffleArray(otherPrizeUrls);
+
+    boxes.forEach((box, i) => {
+      box.classList.add('opened');
+      box.classList.remove('selected');
+      const cube3d = box.querySelector('.cube-3d');
+      const top = cube3d.querySelector('.cube.top');
+      const left = cube3d.querySelector('.cube.left');
+      const right = cube3d.querySelector('.cube.right');
+      const back = cube3d.querySelector('.cube.back');
+      const hexagon = cube3d.querySelector('.hexagon');
+      const prizeImg = cube3d.querySelector('.prize-img');
+      top.style.transform = "translateY(-3rem)";
+      left.style.transform = "translateX(-3rem)";
+      right.style.transform = "translateX(3rem)";
+      top.style.opacity = 0.1;
+      left.style.opacity = 0.1;
+      right.style.opacity = 0.1;
+      back.style.opacity = 0.13;
+      hexagon.style.opacity = 0.45;
+      prizeImg.classList.remove('visible');
+      prizeImg.classList.remove('pulse');
+      prizeImg.style.transition = "none";
+      let hadiah = '';
+      if (i === index) {
+        hadiah = prizeImageUrl;
+        box.classList.add('selected');
+      } else {
+        hadiah = otherPrizeUrls[i % otherPrizeUrls.length];
+      }
+      prizeImg.src = hadiah;
+      setTimeout(() => {
+        prizeImg.classList.add('visible');
+        if (i === index) {
+          prizeImg.style.filter = "opacity(1)";
+          // Efek pulse hadiah utama
+          prizeImg.classList.add('pulse');
+          setTimeout(() => {
+            prizeImg.classList.remove('pulse');
+          }, 500);
+        } else {
+          prizeImg.style.filter = "opacity(0.5)";
+        }
+        prizeImg.style.transition = "";
+      }, 90);
+    });
+
+    document.getElementById('result').innerHTML =
+      `Selamat! Kamu mendapatkan hadiah Rp ${Number(currentPrize).toLocaleString('id-ID')}<br>
+      <a href="https://t.me/freebetjokerscm" target="_blank">🎉 Klaim di sini</a>`;
+  }
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+  function showPrizes() {
+    document.getElementById('prizeModal').classList.add('show');
+  }
+  function closeModal() {
+    document.getElementById('prizeModal').classList.remove('show');
+  }
+</script>
+</body>
+</html>
