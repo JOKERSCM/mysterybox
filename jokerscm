@@ -40,7 +40,6 @@
     @keyframes shimmerMove {
       100% { transform: translateX(-400px) translateY(-100px) rotate(3deg);}
     }
-    /* Particles Gold */
     .particles {
       pointer-events: none;
       position: fixed; z-index: 1;
@@ -60,7 +59,6 @@
       60% { opacity: 0.8;}
       100% { transform: translateY(-70vh) scale(1.5); opacity: 0;}
     }
-    /* Logo Animasi */
     .logo-container {
       margin: 36px auto 24px;
       width: 370px; max-width: 95vw;
@@ -94,7 +92,6 @@
     @keyframes neonPulse {
       to { filter: drop-shadow(0 0 50px #ffd700cc) drop-shadow(0 0 100px #fded72a9) drop-shadow(0 0 100px #ffb30080);}
     }
-    /* Main Title Typing+Flash */
     .main-title {
       font-weight: 900; font-size: 3.2rem; color: #ffe066;
       margin-bottom: 28px; letter-spacing: 2.3px; text-transform: uppercase;
@@ -117,14 +114,12 @@
       0% { text-shadow: 0 0 36px #ffd700, 0 0 40px #fff8; color: #fffad1; }
       100% { text-shadow: 0 2px 24px #ffe066c7, 0 1px 2px #bc9700; color: #ffe066;}
     }
-    /* Keyframes untuk bling */
     @keyframes bling {
       0% { filter:brightness(2.1);}
       40% { filter:brightness(1.2);}
       80% { filter:brightness(1.9);}
       100% { filter:brightness(1);}
     }
-    /* FORM Neon Glass */
     #userForm {
       max-width: 430px; margin: 0 auto;
       padding: 42px 30px 46px;
@@ -189,7 +184,6 @@
       box-shadow: 0 0 24px #ffd700c5, 0 4px 22px #fff4;
       transform: scale(1.04) translateY(-2px);
     }
-    /* Box Container Animasi */
     #boxContainer {
       margin-top: 50px; max-width: 700px; margin-left: auto; margin-right: auto;
       display: none; flex-direction: column; gap: 25px; opacity: 0;
@@ -450,6 +444,7 @@
     return prize.replace(/[^\d]/g, '').trim(); // Ambil hanya angka hadiah
   }
 
+  // --- MULAI: fetch API ke Apps Script Web App ---
   function submitCode() {
     const userId = document.getElementById('userIdInput').value.trim();
     const code = document.getElementById('userInput').value.trim();
@@ -461,28 +456,34 @@
     const boxContainer = document.getElementById('boxContainer');
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
-    boxOpened = false; // reset, supaya bisa buka box lagi setelah submit ulang
+    boxOpened = false;
     openedIndex = null;
     currentPrize = null;
 
-    // Call Apps Script backend (PRODUCTION MODE)
-    google.script.run.withSuccessHandler(function(prize) {
-      submitBtn.disabled = false;
-      if (prize) {
-        // prize kemungkinan format "Rp 2.000" dsb, normalisasi jadi key gambar
-        currentPrize = normalizePrizeKey(prize);
-        form.classList.add('fade-out');
-        setTimeout(() => {
-          form.style.display = 'none';
-          boxContainer.style.display = 'flex';
-          setTimeout(() => boxContainer.classList.add('visible'), 100);
-        }, 200);
-        document.getElementById('result').innerHTML = `<span style="font-size:1.6rem;display:inline-block;animation:bling .8s;">🎉</span>`;
-      } else {
-        alert('Kode sudah digunakan atau tidak valid!');
-      }
-    }).checkCodeAndGetPrizeWithUserId(code, userId);
+    // GANTI URL DI SINI SESUAI WEB APP SCRIPT KAMU!
+    fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?kode=' + encodeURIComponent(code) + '&userid=' + encodeURIComponent(userId))
+      .then(response => response.json())
+      .then(data => {
+        submitBtn.disabled = false;
+        if (data.hadiah) {
+          currentPrize = normalizePrizeKey(data.hadiah);
+          form.classList.add('fade-out');
+          setTimeout(() => {
+            form.style.display = 'none';
+            boxContainer.style.display = 'flex';
+            setTimeout(() => boxContainer.classList.add('visible'), 100);
+          }, 200);
+          document.getElementById('result').innerHTML = `<span style="font-size:1.6rem;display:inline-block;animation:bling .8s;">🎉</span>`;
+        } else {
+          alert(data.reason || 'Kode sudah digunakan, kuota habis, atau tidak valid!');
+        }
+      })
+      .catch(() => {
+        submitBtn.disabled = false;
+        alert('Gagal terhubung ke server, coba lagi.');
+      });
   }
+  // --- AKHIR: fetch API ---
 
   function openBox(index) {
     if (boxOpened || !currentPrize) {
@@ -557,6 +558,6 @@
   function closeModal() {
     document.getElementById('prizeModal').classList.remove('show');
   }
-</script>
+  </script>
 </body>
 </html>
